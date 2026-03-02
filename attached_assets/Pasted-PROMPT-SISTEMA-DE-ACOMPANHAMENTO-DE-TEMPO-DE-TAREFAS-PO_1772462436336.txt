@@ -1,0 +1,231 @@
+PROMPT – SISTEMA DE ACOMPANHAMENTO DE TEMPO DE TAREFAS POR USUÁRIO
+🎯 OBJETIVO
+
+Criar uma aplicação web moderna e intuitiva para registrar e acompanhar o tempo gasto em tarefas do dia a dia, permitindo análises por usuário, por categoria, por dia e por semana, com um dashboard central para acompanhamento de produtividade.
+
+👤 PERSONA
+
+Equipes administrativas, analistas, desenvolvedores e gestores que precisam monitorar esforço, distribuição de tempo por categoria e produtividade individual, com simplicidade e clareza.
+
+🧠 CONTEXTO DE USO
+
+Usuários e tarefas são previamente cadastrados
+
+O usuário registra o tempo associando:
+
+Usuário responsável
+
+Tarefa
+
+Categoria
+
+Data
+
+Horário inicial e final
+
+O sistema consolida automaticamente os dados e reflete as análises no dashboard.
+
+⚙️ FUNCIONALIDADES OBRIGATÓRIAS
+👥 1. CADASTRO DE USUÁRIOS
+
+Tela dedicada para manutenção de usuários.
+
+Campos:
+
+Nome do usuário
+
+Cargo / Função (opcional)
+
+Status (Ativo / Inativo)
+
+Data de cadastro
+
+Ações:
+
+Criar, editar e desativar usuários
+
+🧾 2. CADASTRO DE TAREFAS
+
+Tela dedicada para cadastro de tarefas padrão.
+
+Campos:
+
+Nome da tarefa
+
+Categoria (Reunião, Operacional, Estudo, Suporte, Projeto, Pessoal)
+
+Descrição (opcional)
+
+Status (Ativa / Inativa)
+
+⏱️ 3. LANÇAMENTO DE TEMPO
+
+Tela para registro diário de execução das tarefas.
+
+Campos:
+
+Usuário (seleção a partir do cadastro)
+
+Tarefa (seleção a partir do cadastro)
+
+Categoria (herdada da tarefa)
+
+Data
+
+Hora inicial
+
+Hora final
+
+Regras:
+
+Cálculo automático do tempo gasto
+
+Não permitir hora final menor que hora inicial
+
+Permitir edição posterior
+
+📊 4. DASHBOARD (TELA PRINCIPAL)
+🎛️ Filtro Global
+
+Filtro por Usuário (dropdown)
+
+Opção: “Todos”
+
+Atualiza todos os KPIs, gráficos e tabelas
+
+📌 KPIs (Cards no topo)
+
+⏱️ Total de horas no dia (conforme filtro)
+
+📅 Total de horas na semana (conforme filtro)
+
+👤 Usuário com maior carga horária (quando filtro = Todos)
+
+📈 Média diária de horas
+
+📈 Gráficos do Dashboard
+1️⃣ Gráfico de Barras
+
+Tempo gasto por categoria (semana)
+
+Eixo X: Categorias
+
+Eixo Y: Horas
+
+2️⃣ Gráfico de Linha
+
+Evolução diária de horas
+
+Baseado no usuário selecionado ou geral
+
+3️⃣ Gráfico de Pizza
+
+Distribuição do tempo por categoria
+
+Percentual de esforço por tipo de atividade
+
+📋 5. HISTÓRICO E RELATÓRIOS
+
+Tabela consolidada contendo:
+
+Data
+
+Usuário
+
+Tarefa
+
+Categoria
+
+Hora inicial
+
+Hora final
+
+Tempo gasto
+
+Filtros:
+
+Período (dia, semana ou personalizado)
+
+Usuário
+
+Categoria
+
+Totais dinâmicos:
+
+Total de horas do período
+
+Total de horas por categoria
+
+Total de horas por usuário
+
+🧮 REGRAS DE NEGÓCIO
+
+Tempo = Hora Final – Hora Inicial
+
+Usuários inativos não podem receber novos lançamentos
+
+Tarefas inativas não aparecem para seleção
+
+O filtro de usuário afeta todas as métricas e gráficos
+
+Recalcular dados automaticamente a cada lançamento
+
+🎨 DESIGN & UX
+
+Dashboard como tela inicial
+
+Layout clean, profissional e responsivo
+
+Cards com números grandes
+
+Gráficos claros e objetivos
+
+Filtros sempre visíveis no topo
+
+🧱 ESTRUTURA DE TELAS
+
+Dashboard
+
+Lançamento de Tempo
+
+Cadastro de Usuários
+
+Cadastro de Tarefas
+
+Histórico / Relatórios
+
+🧑‍💻 REQUISITOS TÉCNICOS
+
+Aplicação 100% front-end
+
+Persistência local (localStorage ou IndexedDB)
+
+Sem backend
+
+Sem autenticação (MVP)
+
+Código limpo e modular
+
+🚀 DIFERENCIAIS (OPCIONAIS)
+
+Comparativo semana atual × semana anterior
+
+Destaque para categorias com excesso de horas
+
+Exportação CSV filtrada
+
+Dark mode
+
+Metas semanais por usuário
+
+✅ RESULTADO ESPERADO
+
+Uma aplicação que permita:
+
+Visualizar claramente como o tempo está distribuído por categoria
+
+Acompanhar produtividade por usuário
+
+Tomar decisões com base em dados reais
+
+Melhorar planejamento e foco
