@@ -1,5 +1,14 @@
 import { z } from 'zod';
-import { insertUserSchema, insertTaskSchema, insertTimeLogSchema, users, tasks, timeLogs } from './schema';
+import { 
+  insertUserSchema, 
+  insertCategorySchema,
+  insertTaskSchema, 
+  insertTimeLogSchema, 
+  users, 
+  categories,
+  tasks, 
+  timeLogs 
+} from './schema';
 
 export const errorSchemas = {
   validation: z.object({
@@ -40,12 +49,40 @@ export const api = {
       },
     }
   },
+  categories: {
+    list: {
+      method: 'GET' as const,
+      path: '/api/categories' as const,
+      responses: {
+        200: z.array(z.custom<typeof categories.$inferSelect>()),
+      },
+    },
+    create: {
+      method: 'POST' as const,
+      path: '/api/categories' as const,
+      input: insertCategorySchema,
+      responses: {
+        201: z.custom<typeof categories.$inferSelect>(),
+        400: errorSchemas.validation,
+      },
+    },
+    update: {
+      method: 'PUT' as const,
+      path: '/api/categories/:id' as const,
+      input: insertCategorySchema.partial(),
+      responses: {
+        200: z.custom<typeof categories.$inferSelect>(),
+        400: errorSchemas.validation,
+        404: errorSchemas.notFound,
+      },
+    }
+  },
   tasks: {
     list: {
       method: 'GET' as const,
       path: '/api/tasks' as const,
       responses: {
-        200: z.array(z.custom<typeof tasks.$inferSelect>()),
+        200: z.array(z.custom<any>()), // TaskWithCategory
       },
     },
     create: {

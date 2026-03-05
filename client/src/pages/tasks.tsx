@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTasks, useCreateTask, useUpdateTask } from "@/hooks/use-tasks";
+import { useCategories } from "@/hooks/use-categories";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
@@ -41,50 +42,42 @@ import {
 } from "@/components/ui/select";
 import { Plus, Edit2, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { type Task } from "@shared/schema";
-
-const CATEGORIES = [
-  "Reunião",
-  "Operacional",
-  "Estudo",
-  "Suporte",
-  "Projeto",
-  "Pessoal",
-];
+import { type TaskWithCategory } from "@shared/schema";
 
 const formSchema = z.object({
   name: z.string().min(2, "Nome é obrigatório"),
-  category: z.string().min(1, "Categoria é obrigatória"),
+  categoryId: z.coerce.number().min(1, "Categoria é obrigatória"),
   description: z.string().optional(),
   isActive: z.boolean().default(true),
 });
 
 export default function Tasks() {
-  const { data: tasks, isLoading } = useTasks();
+  const { data: tasks, isLoading: loadingTasks } = useTasks();
+  const { data: categories, isLoading: loadingCategories } = useCategories();
   const createMutation = useCreateTask();
   const updateMutation = useUpdateTask();
   const { toast } = useToast();
 
-  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [editingTask, setEditingTask] = useState<TaskWithCategory | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { name: "", category: "", description: "", isActive: true },
+    defaultValues: { name: "", categoryId: 0, description: "", isActive: true },
   });
 
-  const openDialog = (task?: Task) => {
+  const openDialog = (task?: TaskWithCategory) => {
     if (task) {
       setEditingTask(task);
       form.reset({
         name: task.name,
-        category: task.category,
+        categoryId: task.categoryId,
         description: task.description || "",
         isActive: task.isActive,
       });
     } else {
       setEditingTask(null);
-      form.reset({ name: "", category: "", description: "", isActive: true });
+      form.reset({ name: "", categoryId: 0, description: "", isActive: true });
     }
     setDialogOpen(true);
   };
@@ -110,9 +103,12 @@ export default function Tasks() {
     }
   };
 
-  const toggleStatus = (task: Task, newStatus: boolean) => {
+  const toggleStatus = (task: TaskWithCategory, newStatus: boolean) => {
     updateMutation.mutate({ id: task.id, isActive: newStatus });
   };
+
+  const isLoading = loadingTasks || loadingCategories;
+  const activeCategories = categories?.filter(c => c.isActive) || [];
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -161,13 +157,13 @@ export default function Tasks() {
                 />
                 <FormField
                   control={form.control}
-                  name="category"
+                  name="categoryId"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Categoria</FormLabel>
                       <Select
                         onValueChange={field.onChange}
-                        value={field.value}
+                        value={field.value?.toString() || ""}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -175,9 +171,9 @@ export default function Tasks() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {CATEGORIES.map((c) => (
-                            <SelectItem key={c} value={c}>
-                              {c}
+                          {activeCategories.map((c) => (
+                            <SelectItem key={c.id} value={c.id.toString()}>
+                              {c.name}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -193,7 +189,7 @@ export default function Tasks() {
                     <FormItem>
                       <FormLabel>Descrição</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input {...field} value={field.value || ""} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -273,7 +269,9 @@ export default function Tasks() {
                   >
                     <TableCell className="font-medium">{task.name}</TableCell>
                     <TableCell>
-                      <Badge variant="outline">{task.category}</Badge>
+                      <Badge variant="outline" style={{ borderColor: task.category?.color, color: task.category?.color }}>
+                        {task.category?.name}
+                      </Badge>
                     </TableCell>
                     <TableCell className="text-muted-foreground max-w-[200px] truncate">
                       {task.description || "-"}
@@ -287,7 +285,7 @@ export default function Tasks() {
                             : ""
                         }
                       >
-                        {task.isActive ? "Ativo" : "Inativo"}
+                        {task.isActive ? "Ativo" : "Inativa"}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">

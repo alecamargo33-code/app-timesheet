@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { useTimeLogs } from "@/hooks/use-time-logs";
 import { useUsers } from "@/hooks/use-users";
+import { useCategories } from "@/hooks/use-categories";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
@@ -79,7 +80,7 @@ export default function Dashboard() {
       userTotals[log.userId].mins += log.durationMinutes;
 
       // Group by category
-      const cat = log.task.category;
+      const cat = log.task.category.name;
       categoryTotals[cat] = (categoryTotals[cat] || 0) + log.durationMinutes;
 
       // Group by day for line chart

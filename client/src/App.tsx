@@ -11,6 +11,7 @@ import Dashboard from "./pages/dashboard";
 import TimeLogs from "./pages/time-logs";
 import Users from "./pages/users";
 import Tasks from "./pages/tasks";
+import Categories from "./pages/categories";
 import History from "./pages/history";
 
 function Router() {
@@ -21,6 +22,7 @@ function Router() {
         <Route path="/logs" component={TimeLogs} />
         <Route path="/users" component={Users} />
         <Route path="/tasks" component={Tasks} />
+        <Route path="/categories" component={Categories} />
         <Route path="/history" component={History} />
         <Route component={NotFound} />
       </Switch>

@@ -1,5 +1,5 @@
 import { parseISO } from "date-fns";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -11,6 +11,7 @@ import {
 } from "@/hooks/use-time-logs";
 import { useUsers } from "@/hooks/use-users";
 import { useTasks } from "@/hooks/use-tasks";
+import { useCategories } from "@/hooks/use-categories";
 import {
   Card,
   CardContent,

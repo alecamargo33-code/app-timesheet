@@ -50,6 +50,48 @@ export async function registerRoutes(
     }
   });
 
+  // Categories
+  app.get(api.categories.list.path, async (req, res) => {
+    const categories = await storage.getCategories();
+    res.json(categories);
+  });
+
+  app.post(api.categories.create.path, async (req, res) => {
+    try {
+      const input = api.categories.create.input.parse(req.body);
+      const category = await storage.createCategory(input);
+      res.status(201).json(category);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({
+          message: err.errors[0].message,
+          field: err.errors[0].path.join('.'),
+        });
+      }
+      throw err;
+    }
+  });
+
+  app.put(api.categories.update.path, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const input = api.categories.update.input.parse(req.body);
+      const category = await storage.updateCategory(id, input);
+      if (!category) {
+        return res.status(404).json({ message: "Categoria não encontrada" });
+      }
+      res.json(category);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({
+          message: err.errors[0].message,
+          field: err.errors[0].path.join('.'),
+        });
+      }
+      throw err;
+    }
+  });
+
   // Tasks
   app.get(api.tasks.list.path, async (req, res) => {
     const tasks = await storage.getTasks();
@@ -152,9 +194,16 @@ async function seedDatabase() {
     const u1 = await storage.createUser({ name: "Carlos Silva", role: "Desenvolvedor Backend", isActive: true });
     const u2 = await storage.createUser({ name: "Ana Souza", role: "Product Manager", isActive: true });
     
-    const t1 = await storage.createTask({ name: "Daily Scrum", category: "Reunião", description: "Alinhamento diário da equipe", isActive: true });
-    const t2 = await storage.createTask({ name: "Implementar API de Pagamento", category: "Projeto", description: "Integração com Stripe", isActive: true });
-    const t3 = await storage.createTask({ name: "Estudar Next.js", category: "Estudo", description: "Curso da Alura", isActive: true });
+    const c1 = await storage.createCategory({ name: "Reunião", color: "#3b82f6", isActive: true });
+    const c2 = await storage.createCategory({ name: "Operacional", color: "#10b981", isActive: true });
+    const c3 = await storage.createCategory({ name: "Estudo", color: "#f59e0b", isActive: true });
+    const c4 = await storage.createCategory({ name: "Suporte", color: "#ef4444", isActive: true });
+    const c5 = await storage.createCategory({ name: "Projeto", color: "#8b5cf6", isActive: true });
+    const c6 = await storage.createCategory({ name: "Pessoal", color: "#ec4899", isActive: true });
+
+    const t1 = await storage.createTask({ name: "Daily Scrum", categoryId: c1.id, description: "Alinhamento diário da equipe", isActive: true });
+    const t2 = await storage.createTask({ name: "Implementar API de Pagamento", categoryId: c5.id, description: "Integração com Stripe", isActive: true });
+    const t3 = await storage.createTask({ name: "Estudar Next.js", categoryId: c3.id, description: "Curso da Alura", isActive: true });
     
     const today = new Date();
     const dateStr = today.toISOString().split('T')[0];

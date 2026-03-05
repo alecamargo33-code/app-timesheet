@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { useTimeLogs, useDeleteTimeLog } from "@/hooks/use-time-logs";
 import { useUsers } from "@/hooks/use-users";
+import { useCategories } from "@/hooks/use-categories";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -120,9 +121,9 @@ export default function History() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todas</SelectItem>
-                {CATEGORIES.map((c) => (
-                  <SelectItem key={c} value={c}>
-                    {c}
+                {categories?.map((c) => (
+                  <SelectItem key={c.id} value={c.name}>
+                    {c.name}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -203,8 +204,8 @@ export default function History() {
                       {log.task.name}
                     </TableCell>
                     <TableCell>
-                      <Badge variant="secondary" className="font-normal">
-                        {log.task.category}
+                      <Badge variant="secondary" className="font-normal" style={{ borderColor: log.task.category.color, color: log.task.category.color }}>
+                        {log.task.category.name}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-muted-foreground whitespace-nowrap">

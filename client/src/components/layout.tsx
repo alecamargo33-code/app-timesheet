@@ -4,6 +4,7 @@ import {
   Clock, 
   Users, 
   CheckSquare, 
+  Tag,
   FileText,
   Moon,
   Sun
@@ -27,6 +28,7 @@ const navigation = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
   { name: "Lançamento", href: "/logs", icon: Clock },
   { name: "Usuários", href: "/users", icon: Users },
+  { name: "Categorias", href: "/categories", icon: Tag },
   { name: "Tarefas", href: "/tasks", icon: CheckSquare },
   { name: "Histórico", href: "/history", icon: FileText },
 ];
