@@ -204,8 +204,12 @@ export default function History() {
                       {log.task.name}
                     </TableCell>
                     <TableCell>
-                      <Badge variant="secondary" className="font-normal" style={{ borderColor: log.task.category.color, color: log.task.category.color }}>
-                        {log.task.category.name}
+                      <Badge 
+                        variant="secondary" 
+                        className="font-normal" 
+                        style={log.task.category ? { borderColor: log.task.category.color, color: log.task.category.color } : {}}
+                      >
+                        {log.task.category?.name || "Sem Categoria"}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-muted-foreground whitespace-nowrap">

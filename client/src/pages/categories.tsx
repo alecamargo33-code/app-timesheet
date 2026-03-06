@@ -46,6 +46,7 @@ export default function Categories() {
   const updateMutation = useUpdateCategory();
   const { toast } = useToast();
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   const form = useForm({
     resolver: zodResolver(insertCategorySchema),
@@ -72,6 +73,7 @@ export default function Categories() {
       createMutation.mutate(values, {
         onSuccess: () => {
           toast({ title: "Sucesso", description: "Categoria criada." });
+          setIsCreateOpen(false);
           form.reset();
         },
       });
@@ -86,16 +88,17 @@ export default function Categories() {
           <p className="text-muted-foreground mt-1">Gerencie as categorias das tarefas.</p>
         </div>
         <Dialog
-          open={!!editingCategory || form.formState.isSubmitSuccessful === false}
+          open={isCreateOpen || !!editingCategory}
           onOpenChange={(open) => {
             if (!open) {
               setEditingCategory(null);
+              setIsCreateOpen(false);
               form.reset({ name: "", color: "#3b82f6", isActive: true });
             }
           }}
         >
           <DialogTrigger asChild>
-            <Button className="gap-2">
+            <Button className="gap-2" onClick={() => setIsCreateOpen(true)}>
               <Plus className="h-4 w-4" /> Nova Categoria
             </Button>
           </DialogTrigger>

@@ -80,7 +80,7 @@ export default function Dashboard() {
       userTotals[log.userId].mins += log.durationMinutes;
 
       // Group by category
-      const cat = log.task.category.name;
+      const cat = log.task.category?.name || "Sem Categoria";
       categoryTotals[cat] = (categoryTotals[cat] || 0) + log.durationMinutes;
 
       // Group by day for line chart
