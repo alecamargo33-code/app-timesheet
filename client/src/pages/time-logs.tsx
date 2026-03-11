@@ -75,6 +75,7 @@ export default function TimeLogs() {
   const { data: logs, isLoading: loadingLogs } = useTimeLogs();
   const { data: users, isLoading: loadingUsers } = useUsers();
   const { data: tasks, isLoading: loadingTasks } = useTasks();
+  const { data: categories } = useCategories();
   const createMutation = useCreateTimeLog();
   const deleteMutation = useDeleteTimeLog();
   const { toast } = useToast();
@@ -120,6 +121,7 @@ export default function TimeLogs() {
 
   const activeUsers = users?.filter((u) => u.isActive) || [];
   const activeTasks = tasks?.filter((t) => t.isActive) || [];
+  const categoryMap = new Map(categories?.map((c) => [c.id, c.name]) || []);
   const recentLogs =
     logs
       ?.slice()
@@ -205,7 +207,7 @@ export default function TimeLogs() {
                             <SelectItem key={t.id} value={t.id.toString()}>
                               {t.name}{" "}
                               <span className="text-xs text-muted-foreground ml-2">
-                                ({t.category})
+                                ({categoryMap.get(t.categoryId) || "Sem categoria"})
                               </span>
                             </SelectItem>
                           ))}
