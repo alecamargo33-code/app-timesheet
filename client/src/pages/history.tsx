@@ -30,18 +30,10 @@ function formatDuration(minutes: number) {
   return `${h}h ${m}m`;
 }
 
-const CATEGORIES = [
-  "Reunião",
-  "Operacional",
-  "Estudo",
-  "Suporte",
-  "Projeto",
-  "Pessoal",
-];
-
 export default function History() {
   const { data: logs, isLoading } = useTimeLogs();
   const { data: users } = useUsers();
+  const { data: categories } = useCategories();
   const deleteMutation = useDeleteTimeLog();
 
   const [filterUser, setFilterUser] = useState("all");
@@ -56,7 +48,7 @@ export default function History() {
         const matchUser =
           filterUser === "all" || log.userId.toString() === filterUser;
         const matchCat =
-          filterCategory === "all" || log.task.category === filterCategory;
+          filterCategory === "all" || log.task.category?.name === filterCategory;
 
         let matchDate = true;
         if (dateFrom && dateTo) {
