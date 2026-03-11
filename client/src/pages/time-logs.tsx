@@ -106,7 +106,15 @@ export default function TimeLogs() {
             title: "Sucesso",
             description: "Lançamento registrado com sucesso.",
           });
-          form.reset({ ...values, startTime: values.endTime, endTime: "" }); // chain times
+          // Calculate next hour (add 1 hour to endTime)
+          const [eh, em] = values.endTime.split(":").map(Number);
+          const nextHour = (eh + 1) % 24;
+          const nextEndTime = `${String(nextHour).padStart(2, "0")}:${String(em).padStart(2, "0")}`;
+          form.reset({ 
+            ...values, 
+            startTime: values.endTime,
+            endTime: nextEndTime
+          });
         },
         onError: (err) => {
           toast({
